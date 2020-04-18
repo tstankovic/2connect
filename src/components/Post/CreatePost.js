@@ -124,7 +124,6 @@ const CreatePost = () => {
           <TextField
             className={classes.postText}
             multiline
-            id='outlined-required'
             label='Write something...'
             variant='outlined'
             rows='3'

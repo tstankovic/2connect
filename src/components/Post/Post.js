@@ -32,7 +32,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
   header: {
-    backgroundColor: theme.palette.grey[100],
+    backgroundColor: theme.palette.grey[50],
+  },
+  actions: {
+    backgroundColor: theme.palette.grey[50],
   },
   delete: {
     '&:hover': {
@@ -121,14 +124,12 @@ const Post = ({
           <Typography variant='subtitle1'>{createdBy.username}</Typography>
         }
         subheader={
-          <Typography variant='body2'>
+          <Typography variant='body2' color='textSecondary'>
             {`${formatDistanceToNow(new Date(createdAt))} ago`}
           </Typography>
         }
       />
-      {imageUrl && (
-        <CardMedia component='img' image={imageUrl} title='Paella dish' />
-      )}
+      {imageUrl && <CardMedia component='img' image={imageUrl} />}
       {content && (
         <CardContent>
           <Typography variant='body1' component='p'>

@@ -12,6 +12,7 @@ import PostList from '../components/Post/PostList';
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
   main: {
     backgroundColor: 'lightcyan',
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Main = () => {
+const MainPage = () => {
   const classes = useStyles();
 
   const { user, authLoaded } = useContext(AppContext);
@@ -58,4 +59,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainPage;
