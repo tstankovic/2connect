@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { AppContext } from '../context';
+import firebase from '../firebase';
 import CreatePost from '../components/Post/CreatePost';
 import PostList from '../components/Post/PostList';
 
@@ -34,6 +35,23 @@ const MainPage = () => {
   const classes = useStyles();
 
   const { user, authLoaded } = useContext(AppContext);
+  // console.log(user, authLoaded);
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = firebase
+      .firestore()
+      .collection('posts')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
+        );
+      });
+
+    return () => unsubscribe();
+  }, []);
 
   if (!authLoaded) {
     return (
@@ -52,7 +70,7 @@ const MainPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <CreatePost />
-          <PostList />
+          <PostList posts={posts} />
         </Grid>
       </Grid>
     </Container>

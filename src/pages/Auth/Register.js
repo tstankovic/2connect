@@ -95,10 +95,10 @@ function Register(props) {
       });
       await db.collection('users').doc(createdUser.user.uid).set({
         username: createdUser.user.displayName,
+        email: createdUser.user.email,
         avatar: createdUser.user.photoURL,
-        posts: [],
         followers: [],
-        following: [],
+        createdAt: new Date().toISOString(),
       });
       props.history.push('/');
     } catch (e) {

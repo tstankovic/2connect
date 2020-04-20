@@ -8,14 +8,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -24,18 +18,24 @@ import CommentIcon from '@material-ui/icons/Comment';
 
 import { AppContext } from '../../context';
 import firebase from '../../firebase';
+import Modal from '../Post/DeletePost';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 300,
     width: '100%',
-    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(3),
   },
   header: {
-    backgroundColor: theme.palette.grey[50],
+    backgroundColor: theme.palette.grey[100],
   },
   actions: {
-    backgroundColor: theme.palette.grey[50],
+    backgroundColor: theme.palette.grey[100],
+  },
+  username: {
+    textDecoration: 'none',
+    color: 'black',
   },
   delete: {
     '&:hover': {
@@ -64,12 +64,7 @@ const Post = ({
     } else {
       updatedLikes = [...likes, user.uid];
     }
-    postRef.set(
-      {
-        likes: updatedLikes,
-      },
-      { merge: true }
-    );
+    postRef.update({ likes: updatedLikes });
   };
 
   const handleDelete = async () => {
@@ -91,37 +86,23 @@ const Post = ({
               <IconButton aria-label='settings' onClick={handleOpen}>
                 <DeleteIcon className={classes.delete} />
               </IconButton>{' '}
-              <Dialog open={open} onClose={handleClose}>
-                <DialogTitle id='alert-dialog-title'>Are you sure?</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id='alert-dialog-description'>
-                    Please confirm that you want to permanently delete this post
-                    and it's content. This action is irreversible.
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={handleClose}
-                    color='primary'
-                    variant='outlined'
-                    autoFocus
-                  >
-                    cancel
-                  </Button>
-                  <Button
-                    onClick={handleDelete}
-                    color='secondary'
-                    variant='outlined'
-                  >
-                    delete
-                  </Button>
-                </DialogActions>
-              </Dialog>
+              <Modal
+                open={open}
+                handleClose={handleClose}
+                handleDelete={handleDelete}
+              />
             </>
           )
         }
         title={
-          <Typography variant='subtitle1'>{createdBy.username}</Typography>
+          <Typography
+            component={Link}
+            className={classes.username}
+            to={`/profile/${createdBy.id}`}
+            variant='subtitle1'
+          >
+            {createdBy.username}
+          </Typography>
         }
         subheader={
           <Typography variant='body2' color='textSecondary'>
@@ -139,11 +120,7 @@ const Post = ({
       )}
       <CardActions className={classes.actions}>
         <Badge color='secondary' badgeContent={likes.length} overlap='circle'>
-          <IconButton
-            aria-label='like'
-            className={classes.iconBtn}
-            onClick={handleLike}
-          >
+          <IconButton aria-label='like' onClick={handleLike}>
             {liked ? (
               <FavoriteIcon color='secondary' />
             ) : (
@@ -152,12 +129,7 @@ const Post = ({
           </IconButton>
         </Badge>
         <Badge color='primary' badgeContent={comments.length} overlap='circle'>
-          <IconButton
-            component={Link}
-            to={`/post/${id}`}
-            aria-label='comment'
-            className={classes.iconBtn}
-          >
+          <IconButton component={Link} to={`/post/${id}`} aria-label='comment'>
             <CommentIcon />
           </IconButton>
         </Badge>

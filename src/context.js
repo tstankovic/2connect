@@ -10,14 +10,15 @@ const AppProvider = (props) => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      setAuthLoaded(true);
       if (user) {
         setUser(user);
+        setAuthLoaded(true);
       } else {
         setUser(null);
+        setAuthLoaded(true);
       }
     });
-  });
+  }, []);
 
   return (
     <AppContext.Provider
