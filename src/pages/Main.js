@@ -70,6 +70,8 @@ const MainPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <CreatePost />
+        </Grid>
+        <Grid item xs={12}>
           <PostList posts={posts} />
         </Grid>
       </Grid>

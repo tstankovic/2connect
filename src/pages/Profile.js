@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginTop: theme.spacing(1),
   },
+  joined: {
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 function TabPanel(props) {
@@ -97,7 +100,6 @@ const ProfilePage = (props) => {
   const theme = useTheme();
 
   const { user, authLoaded } = useContext(AppContext);
-  // console.log(user, authLoaded);
 
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
@@ -182,7 +184,7 @@ const ProfilePage = (props) => {
   const renderActions = () => {
     if (id === user.uid) {
       return (
-        <IconButton>
+        <IconButton component={Link} to='/edit-profile'>
           <EditIcon color='primary' />
         </IconButton>
       );
@@ -234,6 +236,14 @@ const ProfilePage = (props) => {
           </div>
           <div className={classes.actions}>{renderActions()}</div>
         </div>
+        <Typography
+          component='span'
+          variant='subtitle2'
+          color='textSecondary'
+          className={classes.joined}
+        >
+          Joined {new Date(profileOwner.data.createdAt).toLocaleDateString()}
+        </Typography>
         <Divider variant='middle' />
         <AppBar className={classes.appBar} position='static' color='default'>
           <Tabs
