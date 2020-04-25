@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const PostPage = (props) => {
   const classes = useStyles();
 
-  const { user, authLoaded } = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   const [post, setPost] = useState(null);
 
@@ -46,16 +46,16 @@ const PostPage = (props) => {
     return () => unsubscribe();
   }, [id, props.history]);
 
-  if (!authLoaded || !post) {
+  if (!user) {
+    return <Redirect to='/login' />;
+  }
+
+  if (!post) {
     return (
       <div className={classes.loading}>
         <CircularProgress className={classes.progress} size={256} />
       </div>
     );
-  } else {
-    if (!user) {
-      return <Redirect to='/login' />;
-    }
   }
 
   return (

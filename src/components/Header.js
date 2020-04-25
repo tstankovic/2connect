@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
   const classes = useStyles();
 
-  const { user, authLoaded } = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   async function logout() {
     try {
@@ -66,7 +66,7 @@ const Header = (props) => {
 
         {user && (
           <div className={classes.icons}>
-            <IconButton color='inherit'>
+            <IconButton component={Link} to='/search' color='inherit'>
               <SearchIcon />
             </IconButton>
 
@@ -80,36 +80,34 @@ const Header = (props) => {
           </div>
         )}
 
-        {authLoaded && (
-          <>
-            {!user && (
-              <Button
-                component={Link}
-                to='/login'
-                color='inherit'
-                variant='outlined'
-                className={classes.login}
-              >
-                login
-              </Button>
-            )}
-            {!user && (
-              <Button
-                component={Link}
-                to='/register'
-                color='inherit'
-                variant='outlined'
-              >
-                register
-              </Button>
-            )}
-            {user && (
-              <Button color='inherit' variant='outlined' onClick={logout}>
-                Logout
-              </Button>
-            )}
-          </>
-        )}
+        <>
+          {!user && (
+            <Button
+              component={Link}
+              to='/login'
+              color='inherit'
+              variant='outlined'
+              className={classes.login}
+            >
+              login
+            </Button>
+          )}
+          {!user && (
+            <Button
+              component={Link}
+              to='/register'
+              color='inherit'
+              variant='outlined'
+            >
+              register
+            </Button>
+          )}
+          {user && (
+            <Button color='inherit' variant='outlined' onClick={logout}>
+              Logout
+            </Button>
+          )}
+        </>
       </Toolbar>
     </AppBar>
   );

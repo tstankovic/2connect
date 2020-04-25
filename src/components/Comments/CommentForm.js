@@ -66,7 +66,7 @@ const CommentForm = ({ post, id }) => {
             variant='outlined'
             fullWidth
           >
-            comment
+            {loading ? 'commenting...' : 'comment'}
           </Button>
         )}
       </form>

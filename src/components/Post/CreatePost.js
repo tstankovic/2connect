@@ -89,10 +89,10 @@ const CreatePost = () => {
     };
     const db = firebase.firestore();
     if (image) {
-      const { name, contentType } = image;
+      const { name, type } = image;
       const storageRef = firebase.storage().ref();
       const imageRef = storageRef.child(`images/${uuidv4()}-${name}`);
-      const metadata = { contentType };
+      const metadata = { contentType: type };
       try {
         const uploadTask = await imageRef.put(image, metadata);
         const imageUrl = await uploadTask.ref.getDownloadURL();
@@ -161,7 +161,7 @@ const CreatePost = () => {
             size='medium'
             endIcon={<SendIcon />}
           >
-            post
+            {loading ? 'posting...' : 'post'}
           </Button>
         </CardActions>
       </form>

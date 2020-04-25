@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     padding: `16px 0`,
   },
   dashboard: {
-    padding: theme.spacing(4),
+    padding: theme.spacing(3),
     display: 'flex',
   },
   actions: {
@@ -69,6 +69,10 @@ const useStyles = makeStyles((theme) => ({
   joined: {
     marginLeft: theme.spacing(2),
   },
+  about: {
+    marginLeft: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 function TabPanel(props) {
@@ -99,7 +103,7 @@ const ProfilePage = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const { user, authLoaded } = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
@@ -117,7 +121,11 @@ const ProfilePage = (props) => {
       .where('createdBy.id', '==', id)
       .onSnapshot((snapshot) => {
         setPosts(
-          snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
+          snapshot.docs
+            .map((doc) => ({ id: doc.id, data: doc.data() }))
+            .sort(
+              (a, b) => new Date(b.data.createdAt) - new Date(a.data.createdAt)
+            )
         );
       });
     const unsubscribeUser = db
@@ -204,16 +212,16 @@ const ProfilePage = (props) => {
     );
   };
 
-  if (!authLoaded || !profileOwner) {
+  if (!user) {
+    return <Redirect to='/login' />;
+  }
+
+  if (!profileOwner) {
     return (
       <div className={classes.loading}>
         <CircularProgress className={classes.progress} size={256} />
       </div>
     );
-  } else {
-    if (!user) {
-      return <Redirect to='/login' />;
-    }
   }
 
   return (
@@ -236,6 +244,9 @@ const ProfilePage = (props) => {
           </div>
           <div className={classes.actions}>{renderActions()}</div>
         </div>
+        <Typography variant='body2' className={classes.about}>
+          {profileOwner.data.about}
+        </Typography>
         <Typography
           component='span'
           variant='subtitle2'

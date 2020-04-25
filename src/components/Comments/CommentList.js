@@ -48,7 +48,7 @@ const CommentList = ({ post, id }) => {
     postRef.update({ comments: updatedComments });
   };
 
-  if (post.comments.length === 0) {
+  if (!post.comments.length) {
     return (
       <Typography
         className={classes.noComments}

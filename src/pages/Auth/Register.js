@@ -78,14 +78,18 @@ function Register(props) {
     const { username, email, password } = values;
     const db = firebase.firestore();
     try {
-      const user = await db.collection('users').doc(username);
-      if (user.exists) {
+      const snap = await db
+        .collection('users')
+        .where('username', '==', username)
+        .get();
+      if (snap.size) {
         setLoading(false);
         setFirebaseError('Account with that username already exists');
         return;
       }
       const image = 'default.jpg';
-      const url = await firebase.storage().ref().child(image).getDownloadURL();
+      const storageRef = firebase.storage().ref();
+      const url = await storageRef.child(image).getDownloadURL();
       const createdUser = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
@@ -97,6 +101,7 @@ function Register(props) {
         username: createdUser.user.displayName,
         email: createdUser.user.email,
         avatar: createdUser.user.photoURL,
+        about: '',
         followers: [],
         createdAt: new Date().toISOString(),
       });
