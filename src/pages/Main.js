@@ -88,7 +88,7 @@ const MainPage = () => {
             <div className={classes.loading}>
               <CircularProgress className={classes.progress} size={256} />
             </div>
-          ) : posts.length ? (
+          ) : !posts.length ? (
             <Typography
               className={classes.noPosts}
               variant='body1'
