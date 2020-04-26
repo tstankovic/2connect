@@ -44,12 +44,7 @@ const AppProvider = (props) => {
   }
 
   return (
-    <AppContext.Provider
-      value={{
-        user,
-        authLoaded,
-      }}
-    >
+    <AppContext.Provider value={{ user, authLoaded }}>
       {props.children}
     </AppContext.Provider>
   );
